@@ -1,4 +1,4 @@
-package org.sid.dao;
+package org.sid.entities;
 
 
 import lombok.AllArgsConstructor;

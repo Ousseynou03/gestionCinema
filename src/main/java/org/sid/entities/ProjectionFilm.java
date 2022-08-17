@@ -1,4 +1,4 @@
-package org.sid.dao;
+package org.sid.entities;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -12,11 +12,18 @@ import java.util.Date;
 
 @Entity
 @Data @AllArgsConstructor @NoArgsConstructor @ToString
-public class Sceance implements Serializable {
+public class ProjectionFilm implements Serializable {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private Date heureDebut;
+    private Date dateProjection;
+    private double prix;
 
-    @OneToMany(mappedBy = "sceance")
-    private Collection<ProjectionFilm> projectionFilm;
+    @ManyToOne
+    private Salle salle;
+    @ManyToOne
+    private Film film;
+    @OneToMany(mappedBy="projectionFilm")
+    private Collection<Ticket> tickets;
+    @ManyToOne
+    private Sceance sceance;
 }

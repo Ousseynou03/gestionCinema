@@ -5,11 +5,9 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.io.Serializable;
+import java.util.Collection;
 
 @Entity
 @Data @AllArgsConstructor @NoArgsConstructor @ToString
@@ -17,4 +15,8 @@ public class Categorie implements Serializable {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String name;
+
+    @OneToMany(mappedBy = "categorie")
+    private Collection<Film> film;
+
 }

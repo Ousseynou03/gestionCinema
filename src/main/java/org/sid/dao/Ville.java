@@ -5,11 +5,10 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.io.Serializable;
+import java.util.Collection;
+import java.util.List;
 
 @Entity
 @Data @NoArgsConstructor @AllArgsConstructor @ToString
@@ -18,4 +17,7 @@ public class Ville implements Serializable {
     private Long id;
     private String name;
     private double longitude, latitude, altitude;
+
+    @OneToMany(mappedBy = "ville")
+   private Collection<Cinema> cinemas;
 }

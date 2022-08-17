@@ -6,11 +6,9 @@ import lombok.NoArgsConstructor;
 import lombok.ToString;
 import org.hibernate.hql.spi.QueryTranslator;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.io.Serializable;
+import java.util.Collection;
 import java.util.Date;
 
 @Entity
@@ -25,4 +23,9 @@ public class Film implements Serializable {
     private String description;
     private String photo;
     private Date dateSortie;
+
+    @OneToMany(mappedBy = "film")
+    private Collection<ProjectionFilm> projectionFilm;
+    @ManyToOne
+    private Categorie categorie;
 }

@@ -5,11 +5,9 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.io.Serializable;
+import java.util.Collection;
 
 @Entity
 @Data @NoArgsConstructor @AllArgsConstructor @ToString
@@ -18,4 +16,13 @@ public class Salle  implements Serializable {
     private Long id;
     private String name;
     private int nombrePlaces;
+
+    @ManyToOne
+    private Cinema cinema;
+    @OneToMany(mappedBy = "salle")
+    private Collection<Place> places;
+
+    @OneToMany(mappedBy = "salle")
+    private Collection<ProjectionFilm> projectionFilm;
+
 }

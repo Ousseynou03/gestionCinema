@@ -5,7 +5,7 @@ public interface ICinemaInitService {
     public void initCinemas();
     public void initsalles();
     public void initPlaces();
-    public void Sceances();
+    public void initSceances();
     public void initCategories();
     public void films();
     public void initProjectionFilms();

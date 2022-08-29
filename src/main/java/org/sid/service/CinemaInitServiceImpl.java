@@ -6,12 +6,18 @@ import org.sid.entities.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.List;
+import java.util.Random;
 import java.util.stream.Stream;
 
+
 @Service
+@Transactional
 public class CinemaInitServiceImpl implements ICinemaInitService {
 
     @Autowired
@@ -60,7 +66,8 @@ public class CinemaInitServiceImpl implements ICinemaInitService {
     }
 
     @Override
-    public void initsalles() {
+
+    public void initSalles() {
         cinemaRepository.findAll().forEach(cinema -> {
             for (int i = 0; i < cinema.getNombreSalles();i++) {
                 Salle salle = new Salle();
@@ -72,7 +79,6 @@ public class CinemaInitServiceImpl implements ICinemaInitService {
         });
 
     }
-
     @Override
     public void initPlaces() {
         salleRepository.findAll().forEach(salle -> {
@@ -117,22 +123,62 @@ public class CinemaInitServiceImpl implements ICinemaInitService {
     }
 
     @Override
-    public void films() {
-        Stream.of("Serpent dans l'avion","Spider Man","Cat Women").forEach(
+    public void initfilms() {
+        List<Categorie> categorie = categorieRepository.findAll();
+        double[] durees = new double[] {1,1.5,2,2.5,3,};
+        Stream.of("50 nuances de grey","Confessions","On sort pour la photo","rouge").forEach(
                 films -> {
+                    Film film = new Film();
+                    film.setTitre(films);
+                    film.setDuree(durees[new Random().nextInt(durees.length)]);
+                    film.setPhoto(films);
+                    film.setCategorie(categorie.get(new Random().nextInt(categorie.size())));
+                    filmRepository.save(film);
 
                 }
         );
 
     }
 
+
+
     @Override
     public void initProjectionFilms() {
+        double[] prices = new double[] {30,40,50,10,90,100};
+        villeRepository.findAll().forEach(ville->{
+           ville.getCinemas().forEach(cinema -> {
+               cinema.getSalles().forEach(
+                       salle -> {
+                           filmRepository.findAll().forEach(films -> {
+                               sceanceRepository.findAll().forEach(sceance -> {
+                                   ProjectionFilm projection = new ProjectionFilm();
+                                   projection.setDateProjection(new Date());
+                                   projection.setFilm(films);
+                                   projection.setPrix(prices[new Random().nextInt(prices.length)]);
+                                   projectionFilmRepository.save(projection);
+                               });
+                           });
+                       }
+               );
+           });
+        });
 
     }
 
     @Override
     public void initTickets() {
+        projectionFilmRepository.findAll().forEach(
+                p->{
+                    p.getSalle().getPlaces().forEach(place -> {
+                        Ticket ticket = new Ticket();
+                        ticket.setPlace(place);
+                        ticket.setPrix(p.getPrix());
+                        ticket.setProjectionFilm(p);
+                        ticket.setReservee(false);
+                        ticketRepository.save(ticket);
+                    });
+                });
 
     }
+
 }
